@@ -1,0 +1,4 @@
+syntax: glob
+_ReSharper.C2DMNet
+bin
+obj
