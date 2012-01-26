@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,7 +18,7 @@ namespace C2DMNet
         private const string ParamCollapseKey = "collapse_key";
 
         public HttpStatusCode SendMessage(string authToken, string registrationId,
-                                      string message, out string error)
+                                      IDictionary<string, string> content, out string error)
         {
 
             var postDataBuilder = new StringBuilder();
@@ -25,13 +26,15 @@ namespace C2DMNet
                 .Append(registrationId);
             postDataBuilder.Append("&").Append(ParamCollapseKey).Append("=")
                 .Append("0");
-            postDataBuilder.Append("&").Append("data.payload").Append("=")
-                .Append(HttpUtility.UrlEncodeUnicode(message));
+            foreach (var kvp in content)
+            {
+                postDataBuilder.Append("&").Append("data.").Append(kvp.Key).Append("=")
+                   .Append(HttpUtility.UrlEncodeUnicode(kvp.Value));
+            }
+            
 
             var encoding = new UTF8Encoding();
             byte[] postData = encoding.GetBytes(postDataBuilder.ToString());
-
-            // Hit the dm URL.
 
             var url = new Uri("https://android.clients.google.com/c2dm/send");
             ServicePointManager.ServerCertificateValidationCallback += ValidationCallback;

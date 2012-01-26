@@ -1,10 +1,11 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 
 namespace C2DMNet
 {
     public interface IC2DMConnectionService
     {
         string GetToken(string email, string password, string source);
-        HttpStatusCode SendMessage(string authToken, string registrationId, string message, out string error);
+        HttpStatusCode SendMessage(string authToken, string registrationId, IDictionary<string,string> content, out string error);
     }
 }

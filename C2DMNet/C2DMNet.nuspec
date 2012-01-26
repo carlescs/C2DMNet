@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Dibaelsa</authors>
+    <owners>Dibaelsa</owners>
+    <projectUrl>https://bitbucket.org/carlescs/c2dmnet/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>C2dm library to send messages to Android phones.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2012</copyright>
+    <tags>android c2dm messaging</tags>
+  </metadata>
+</package>
