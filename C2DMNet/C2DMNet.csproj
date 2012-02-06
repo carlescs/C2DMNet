@@ -45,7 +45,9 @@
     <Compile Include="Util\StreamReaderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C2DMNet.nuspec" />
+    <None Include="C2DMNet.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

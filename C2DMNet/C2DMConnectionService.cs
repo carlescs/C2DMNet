@@ -59,9 +59,17 @@ namespace C2DMNet
                 var streamReader = new StreamReader(httpWebResponse.GetResponseStream());
                 error = streamReader.ReadLines().First(t => t.StartsWith("Error=")).Substring(6);
             }
+            else if(responseCode.Equals(501))
+            {
+                error = "Server unavailable.";
+            }
+            else if(responseCode.Equals(401))
+            {
+                error = "Invalid AUTH_TOKEN";
+            }
             else
             {
-                error = "Ok";
+                error = "Unspecified error";
             }
 
             return responseCode;
