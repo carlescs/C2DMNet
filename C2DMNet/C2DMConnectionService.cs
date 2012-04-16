@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Web;
 using C2DMNet.Contracts;
+using C2DMNet.Contracts.DataContracts;
 using C2DMNet.Util;
 
 namespace C2DMNet
@@ -18,8 +19,8 @@ namespace C2DMNet
 
         private const string ParamCollapseKey = "collapse_key";
 
-        public HttpStatusCode SendMessage(string authToken, string registrationId,
-                                      IDictionary<string, string> content, out string error)
+        public SendMessageDataContract SendMessage(string authToken, string registrationId,
+                                      IDictionary<string, string> content)
         {
 
             var postDataBuilder = new StringBuilder();
@@ -54,16 +55,17 @@ namespace C2DMNet
 
             var httpWebResponse = ((HttpWebResponse)conn.GetResponse());
             var responseCode = httpWebResponse.StatusCode;
-            if (responseCode.Equals(200))
+            string error;
+            if (responseCode.Equals(HttpStatusCode.OK))
             {
                 var streamReader = new StreamReader(httpWebResponse.GetResponseStream());
                 error = streamReader.ReadLines().First(t => t.StartsWith("Error=")).Substring(6);
             }
-            else if(responseCode.Equals(501))
+            else if(responseCode.Equals(HttpStatusCode.NotImplemented))
             {
                 error = "Server unavailable.";
             }
-            else if(responseCode.Equals(401))
+            else if(responseCode.Equals(HttpStatusCode.Unauthorized))
             {
                 error = "Invalid AUTH_TOKEN";
             }
@@ -72,7 +74,12 @@ namespace C2DMNet
                 error = "Unspecified error";
             }
 
-            return responseCode;
+            return new SendMessageDataContract
+                       {
+                           Error = error,
+                           ResponseCode = responseCode,
+                           UpdateClient = httpWebResponse.Headers["Update-Client-Auth"]
+                       };
         }
 
         public string GetToken(string email, string password, string source)

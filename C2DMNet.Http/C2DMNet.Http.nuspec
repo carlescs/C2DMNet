@@ -2,18 +2,18 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.1.0.1</version>
+    <version>2.0.0.0</version>
     <title>$title$</title>
     <authors>Dibaelsa</authors>
     <owners>Dibaelsa</owners>
     <projectUrl>https://bitbucket.org/carlescs/c2dmnet/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>C2dm library to send messages to Android phones. HttpClient version.</description>
-    <releaseNotes>Added HttpClient version.</releaseNotes>
+    <releaseNotes>Breaking changes! Uses a DataContract to return data from the SendMessage function.</releaseNotes>
     <copyright>Copyright 2012</copyright>
     <tags>android c2dm messaging</tags>
     <dependencies>
-      <dependency id="C2DMNet.Contracts" version="1.1.0.0" />
+      <dependency id="C2DMNet.Contracts" version="2.0.0.1" />
       <dependency id="System.Net.Http" />
     </dependencies>
   </metadata>
