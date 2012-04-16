@@ -82,6 +82,62 @@ namespace C2DMNet
                        };
         }
 
+        [Obsolete("Use other SendMessage.")]
+        public HttpStatusCode SendMessage(string authToken, string registrationId, IDictionary<string, string> content, out string error)
+        {
+            var postDataBuilder = new StringBuilder();
+            postDataBuilder.Append(ParamRegistrationId).Append("=")
+                .Append(registrationId);
+            postDataBuilder.Append("&").Append(ParamCollapseKey).Append("=")
+                .Append("0");
+            foreach (var kvp in content)
+            {
+                postDataBuilder.Append("&").Append("data.").Append(kvp.Key).Append("=")
+                   .Append(HttpUtility.UrlEncodeUnicode(kvp.Value));
+            }
+
+
+            var encoding = new UTF8Encoding();
+            byte[] postData = encoding.GetBytes(postDataBuilder.ToString());
+
+            var url = new Uri("https://android.clients.google.com/c2dm/send");
+            ServicePointManager.ServerCertificateValidationCallback += ValidationCallback;
+
+            var conn = (HttpWebRequest)WebRequest.Create(url);
+            conn.Proxy = null;
+
+            conn.Method = "POST";
+            conn.ContentType = "application/x-www-form-urlencoded;charset=UTF-8";
+            conn.ContentLength = postData.Length;
+            conn.Headers.Add("Authorization", "GoogleLogin auth="
+                                                     + authToken);
+            var sort = conn.GetRequestStream();
+            sort.Write(postData, 0, postData.Length);
+            sort.Close();
+
+            var httpWebResponse = ((HttpWebResponse)conn.GetResponse());
+            var responseCode = httpWebResponse.StatusCode;
+            if (responseCode.Equals(HttpStatusCode.OK))
+            {
+                var streamReader = new StreamReader(httpWebResponse.GetResponseStream());
+                error = streamReader.ReadLines().First(t => t.StartsWith("Error=")).Substring(6);
+            }
+            else if (responseCode.Equals(HttpStatusCode.NotImplemented))
+            {
+                error = "Server unavailable.";
+            }
+            else if (responseCode.Equals(HttpStatusCode.Unauthorized))
+            {
+                error = "Invalid AUTH_TOKEN";
+            }
+            else
+            {
+                error = "Unspecified error";
+            }
+
+            return responseCode;
+        }
+
         public string GetToken(string email, string password, string source)
         {
             var builder = new StringBuilder();

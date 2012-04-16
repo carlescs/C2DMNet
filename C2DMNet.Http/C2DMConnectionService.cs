@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Security;
@@ -86,6 +87,63 @@ namespace C2DMNet.Http
                                                      };
                                       });
                 return res.Result;
+            }
+        }
+
+        [Obsolete("Use other SendMessage.")]
+        public HttpStatusCode SendMessage(string authToken, string registrationId, IDictionary<string, string> content, out string error)
+        {
+            using (var client=new HttpClient())
+            {
+                var nameValueCollection = new Dictionary<string, string>
+                                              {
+                                                  {"registration_id", registrationId}, {"collapse_key", "0"}
+                                              };
+                foreach (var kvp in content)
+                {
+                    nameValueCollection.Add("data." + kvp.Key, kvp.Value);
+                }
+                var postContent = new FormUrlEncodedContent(nameValueCollection);
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://android.clients.google.com/c2dm/send")
+                                  {
+                                      Content = postContent
+                                  };
+                ServicePointManager.ServerCertificateValidationCallback += ValidationCallback;
+                request.Headers.Add(HttpRequestHeader.Authorization.ToString(), string.Format("GoogleLogin auth={0}", authToken));
+                var res = client.SendAsync(request)
+                    .ContinueWith(t =>
+                                      {
+                                          var responseCode = t.Result.StatusCode;
+                                          string errorString;
+                                          if (responseCode.Equals(HttpStatusCode.OK))
+                                          {
+                                              errorString = t.Result.Content.ReadAsStringAsync().ContinueWith(s =>
+                                                                                                                  {
+                                                                                                                      var errorOut = s.Result.Split('\n').FirstOrDefault(r => r.StartsWith("Error="));
+                                                                                                                      return errorOut != null ? errorOut.Substring(6) : null;
+                                                                                                                  }).Result;
+                                          }
+                                          else if (responseCode.Equals(HttpStatusCode.NotImplemented))
+                                          {
+                                              errorString = "Server unavailable.";
+                                          }
+                                          else if (responseCode.Equals(HttpStatusCode.Unauthorized))
+                                          {
+                                              errorString = "Invalid AUTH_TOKEN";
+                                          }
+                                          else
+                                          {
+                                              errorString = "Unspecified error";
+                                          }
+                                          return new SendMessageDataContract
+                                                     {
+                                                         ResponseCode = responseCode,
+                                                         Error=errorString,
+                                                         UpdateClient = t.Result.Content.Headers.Contains("Update-Client-Auth") ? t.Result.Content.Headers.GetValues("Update-Client-Auth").First() : null
+                                                     };
+                                      });
+                error = res.Result.Error;
+                return res.Result.ResponseCode;
             }
         }
 
