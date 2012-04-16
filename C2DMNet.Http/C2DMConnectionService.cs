@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Web;
 using C2DMNet.Contracts;
 using System.Linq;
 using C2DMNet.Contracts.DataContracts;
@@ -37,11 +38,15 @@ namespace C2DMNet.Http
         {
             using (var client=new HttpClient())
             {
-                var postContent = new FormUrlEncodedContent(content.Concat(new Dictionary<string, string>
-                                                                               {
-                                                                                   {"registration_id", registrationId},
-                                                                                   {"collapse_key", "0"}
-                                                                               }));
+                var nameValueCollection = new Dictionary<string, string>
+                                              {
+                                                  {"registration_id", registrationId}, {"collapse_key", "0"}
+                                              };
+                foreach (var kvp in content)
+                {
+                    nameValueCollection.Add("data." + kvp.Key, kvp.Value);
+                }
+                var postContent = new FormUrlEncodedContent(nameValueCollection);
                 var request = new HttpRequestMessage(HttpMethod.Post, "https://android.clients.google.com/c2dm/send")
                                   {
                                       Content = postContent
@@ -57,8 +62,8 @@ namespace C2DMNet.Http
                                           {
                                               errorString = t.Result.Content.ReadAsStringAsync().ContinueWith(s =>
                                                                                                                   {
-                                                                                                                      string error = s.Result.Split('\n').FirstOrDefault(r => r.StartsWith("Error="));
-                                                                                                                      return error!=null?error.Substring(6):null;
+                                                                                                                      var error = s.Result.Split('\n').FirstOrDefault(r => r.StartsWith("Error="));
+                                                                                                                      return error != null ? error.Substring(6) : null;
                                                                                                                   }).Result;
                                           }
                                           else if (responseCode.Equals(HttpStatusCode.NotImplemented))
