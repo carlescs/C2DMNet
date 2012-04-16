@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Net;
 
-namespace C2DMNet
+namespace C2DMNet.Contracts
 {
     public interface IC2DMConnectionService
     {

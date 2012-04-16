@@ -7,6 +7,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Web;
+using C2DMNet.Contracts;
 using C2DMNet.Util;
 
 namespace C2DMNet
@@ -47,7 +48,6 @@ namespace C2DMNet
             conn.ContentLength = postData.Length;
             conn.Headers.Add("Authorization", "GoogleLogin auth="
                                                      + authToken);
-
             var sort = conn.GetRequestStream();
             sort.Write(postData, 0, postData.Length);
             sort.Close();
