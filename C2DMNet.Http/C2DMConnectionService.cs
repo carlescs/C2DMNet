@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using System.Web;
 using C2DMNet.Contracts;
 using System.Linq;
 using C2DMNet.Contracts.DataContracts;

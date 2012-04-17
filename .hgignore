@@ -4,3 +4,4 @@ bin
 obj
 *.nupkg
 C2DMNet/C2DMNet.csproj.user
+packages/

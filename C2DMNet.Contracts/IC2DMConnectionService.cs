@@ -7,7 +7,6 @@ namespace C2DMNet.Contracts
 {
     public interface IC2DMConnectionService
     {
-        string GetToken(string email, string password, string source);
         SendMessageDataContract SendMessage(string authToken, string registrationId, IDictionary<string,string> content);
         [Obsolete("Use other SendMessage")]
         HttpStatusCode SendMessage(string authToken, string registrationId, IDictionary<string, string> content, out string error);

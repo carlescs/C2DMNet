@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="DataContracts\SendMessageDataContract.cs" />
     <Compile Include="IC2DMConnectionService.cs" />
+    <Compile Include="IC2DMConnectionServiceAsync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
