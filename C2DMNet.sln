@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F3DD59
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2DMNet.TestApp", "C2DMNet.TestApp\C2DMNet.TestApp.csproj", "{BF38B1D9-5212-487D-BA00-863CEE996BB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,16 @@ Global
 		{3FB76F14-94B7-4AA6-A7BE-3E6FA4CDBF84}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3FB76F14-94B7-4AA6-A7BE-3E6FA4CDBF84}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3FB76F14-94B7-4AA6-A7BE-3E6FA4CDBF84}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Debug|x86.ActiveCfg = Debug|x86
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Debug|x86.Build.0 = Debug|x86
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Release|Any CPU.ActiveCfg = Release|x86
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Release|Mixed Platforms.Build.0 = Release|x86
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Release|x86.ActiveCfg = Release|x86
+		{BF38B1D9-5212-487D-BA00-863CEE996BB1}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

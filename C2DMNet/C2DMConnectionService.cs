@@ -59,7 +59,8 @@ namespace C2DMNet
             if (responseCode.Equals(HttpStatusCode.OK))
             {
                 var streamReader = new StreamReader(httpWebResponse.GetResponseStream());
-                error = streamReader.ReadLines().First(t => t.StartsWith("Error=")).Substring(6);
+                var errorString = streamReader.ReadLines().FirstOrDefault(t => t.StartsWith("Error="));
+                error = errorString!=null?errorString.Substring(6):null;
             }
             else if(responseCode.Equals(HttpStatusCode.NotImplemented))
             {
