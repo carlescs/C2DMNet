@@ -9,6 +9,7 @@ using System.Text;
 using System.Web;
 using C2DMNet.Contracts;
 using C2DMNet.Contracts.DataContracts;
+using C2DMNet.Contracts.Enums;
 using C2DMNet.Util;
 
 namespace C2DMNet
@@ -56,28 +57,34 @@ namespace C2DMNet
             var httpWebResponse = ((HttpWebResponse)conn.GetResponse());
             var responseCode = httpWebResponse.StatusCode;
             string error;
+            C2DMResponseCode c2DMResponse;
             if (responseCode.Equals(HttpStatusCode.OK))
             {
                 var streamReader = new StreamReader(httpWebResponse.GetResponseStream());
                 var errorString = streamReader.ReadLines().FirstOrDefault(t => t.StartsWith("Error="));
                 error = errorString!=null?errorString.Substring(6):null;
+                c2DMResponse=C2DMResponseCode.Ok;
             }
             else if(responseCode.Equals(HttpStatusCode.NotImplemented))
             {
                 error = "Server unavailable.";
+                c2DMResponse=C2DMResponseCode.ServerUnavailable;
             }
             else if(responseCode.Equals(HttpStatusCode.Unauthorized))
             {
                 error = "Invalid AUTH_TOKEN";
+                c2DMResponse=C2DMResponseCode.InvalidAuthToken;
             }
             else
             {
                 error = "Unspecified error";
+                c2DMResponse=C2DMResponseCode.Error;
             }
 
             return new SendMessageDataContract
                        {
                            Error = error,
+                           C2DMResponseCode = c2DMResponse,
                            ResponseCode = responseCode,
                            UpdateClient = httpWebResponse.Headers["Update-Client-Auth"]
                        };

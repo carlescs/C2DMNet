@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using C2DMNet.Contracts;
 using C2DMNet.Contracts.DataContracts;
+using C2DMNet.Contracts.Enums;
 
 namespace C2DMNet.Http
 {
@@ -53,26 +54,32 @@ namespace C2DMNet.Http
 
                 var responseCode = res.StatusCode;
                 string errorString;
+                C2DMResponseCode c2DMResponse;
                 if (responseCode.Equals(HttpStatusCode.OK))
                 {
                     var errorLine=(await res.Content.ReadAsStringAsync()).Split('\n').FirstOrDefault(r => r.StartsWith("Error="));
                     errorString = errorLine != null ? errorLine.Substring(6) : null;
+                    c2DMResponse=C2DMResponseCode.Ok;
                 }
                 else if (responseCode.Equals(HttpStatusCode.NotImplemented))
                 {
                     errorString = "Server unavailable.";
+                    c2DMResponse = C2DMResponseCode.ServerUnavailable;
                 }
                 else if (responseCode.Equals(HttpStatusCode.Unauthorized))
                 {
                     errorString = "Invalid AUTH_TOKEN";
+                    c2DMResponse=C2DMResponseCode.InvalidAuthToken;
                 }
                 else
                 {
                     errorString = "Unspecified error";
+                    c2DMResponse = C2DMResponseCode.Error;
                 }
                 return new SendMessageDataContract
                            {
                                ResponseCode = responseCode,
+                               C2DMResponseCode=c2DMResponse,
                                Error = errorString,
                                UpdateClient = res.Content.Headers.Contains("Update-Client-Auth") ? res.Content.Headers.GetValues("Update-Client-Auth").First() : null
                            };
