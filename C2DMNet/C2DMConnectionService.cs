@@ -32,7 +32,7 @@ namespace C2DMNet
             foreach (var kvp in content)
             {
                 postDataBuilder.Append("&").Append("data.").Append(kvp.Key).Append("=")
-                   .Append(HttpUtility.UrlEncodeUnicode(kvp.Value));
+                    .Append(HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(kvp.Value)));
             }
             
 
@@ -101,7 +101,7 @@ namespace C2DMNet
             foreach (var kvp in content)
             {
                 postDataBuilder.Append("&").Append("data.").Append(kvp.Key).Append("=")
-                   .Append(HttpUtility.UrlEncodeUnicode(kvp.Value));
+                   .Append(HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(kvp.Value)));
             }
 
 
