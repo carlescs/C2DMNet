@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>$id$</id>
-    <version>2.2.0.2</version>
+    <version>2.3.0.0</version>
     <title>$title$</title>
     <authors>Dibaelsa</authors>
     <owners>Dibaelsa</owners>
@@ -13,7 +13,7 @@
     <copyright>Copyright 2012</copyright>
     <tags>android c2dm messaging</tags>
     <dependencies>
-      <dependency id="C2DMNet.Contracts" version="2.2.0.2" />
+      <dependency id="C2DMNet.Contracts" version="2.3.0.0" />
     </dependencies>
   </metadata>
 </package>
